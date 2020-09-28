@@ -1,31 +1,12 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { 
   HomePage, 
   ShopPage,
   AuthPage,
 } from '../../pages';
 import Header from '../header';
-// import { HatsPage } from '../../pages/shop';
-import { auth } from '../../firebase/firebase.utils';
-
-const TopicsDetailPage = (props) => {
-  console.log({ props });
-  return (
-    <div>
-      <h1>Topic Detail Page: {props.match.params.topicId}</h1>
-    </div>
-  )
-}
-
-
-const TopicsListPage = () => {
-  return (
-    <div>
-      <h1>Topic List Page</h1>
-    </div>
-  )
-}
+import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
 
 class App extends Component {
 
@@ -34,13 +15,43 @@ class App extends Component {
   }
 
   componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user })
-      console.log({ user });
-    })
+    // const { setCurrentUser } = this.props;
+
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      console.log({ userAuth })
+      if (userAuth) {
+
+        const userRef = await createUserProfileDocument(userAuth);
+ 
+        userRef.onSnapshot(snapShot => {
+          console.log({ snapShot: snapShot.data() });
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          })
+          // setCurrentUser({
+          //   id: snapShot.id,
+          //   ...snapShot.data()
+          // });
+        });
+      } else {
+        this.setState({
+          currentUser: userAuth
+        })
+      }
+
+      // setCurrentUser(userAuth);
+    });
+  }
+ 
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
   }
 
   render() {
+    console.log(this.state);
     return (
       <Router>
         <div className="app">
@@ -48,7 +59,18 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={HomePage}/>
             <Route exact path="/shop" component={ShopPage}/>
-            <Route exact path="/signin" component={AuthPage}/>
+            <Route
+            exact
+              path='/signin'
+              render={() =>
+                this.props.currentUser ? (
+                  <Redirect to='/' />
+                ) : (
+                  <AuthPage />
+                )
+              }
+            />
+            {/* <Route exact path="/signin" component={AuthPage}/> */}
           </Switch>
         </div>
       </Router>
