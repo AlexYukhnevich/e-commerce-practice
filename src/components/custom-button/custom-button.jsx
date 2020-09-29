@@ -1,6 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
+// import { CustomButtonContainer } from './custom-button.styles';
 
+// const CustomButton = ({ children, ...props }) => (
+//   <CustomButtonContainer { ...props }>
+//     { children }
+//   </CustomButtonContainer >
+// );
 const CustomButton = ({ children, isGoogleSignIn, inverted, ...otherProps }) => (
   <button
     className={
@@ -15,5 +21,4 @@ const CustomButton = ({ children, isGoogleSignIn, inverted, ...otherProps }) => 
     {children}
   </button>
 );
-
 export default CustomButton;

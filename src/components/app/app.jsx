@@ -12,16 +12,14 @@ import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
 import { connect } from 'react-redux';
 import { setCurrentUser } from '../../redux/user/user.actions';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
+// import { selectCollectionsForPreview } from '../../redux/shop/shop.selectors';
 
 class App extends Component {
 
   componentDidMount() {
-
-    const { setCurrentUser } = this.props;
-
+    const { setCurrentUser, collectionsArray } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
-
         const userRef = await createUserProfileDocument(userAuth);
  
         userRef.onSnapshot(snapShot => {
@@ -30,9 +28,8 @@ class App extends Component {
             ...snapShot.data()
           });
         });
-      } else {
-        setCurrentUser(userAuth);
-      }
+      } 
+      setCurrentUser(userAuth);
     });
   }
  
@@ -68,7 +65,8 @@ class App extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  // collectionsArray: selectCollectionsForPreview,
 });
 
 const mapDispatchToProps = dispatch => ({
