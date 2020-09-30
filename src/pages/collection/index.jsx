@@ -1,4 +1,4 @@
-import CollectionPage from './collection.page';
+import CollectionPageContainer from './collection.page.container';
 import './collection.style.scss';
 
-export default CollectionPage;
+export default CollectionPageContainer;
