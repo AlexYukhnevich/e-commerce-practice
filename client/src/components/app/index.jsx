@@ -1,4 +1,4 @@
 import App from './app';
-import './app.scss';
+// import './app.scss';
 
 export default App;

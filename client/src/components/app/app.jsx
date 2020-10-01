@@ -12,20 +12,19 @@ import { connect } from 'react-redux';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { checkUserSession } from '../../redux/user/user.actions';
 
+import { GlobalStyle } from '../../global.styles';
+
 const App = ({ currentUser, checkUserSession }) => {
 
-  // const unsubscribeFromAuth = null;
 
   useEffect(() => {
     checkUserSession()
-    // return () => {
-    //   unsubscribeFromAuth();
-    // }
   }, [checkUserSession])
 
   return (
     <Router>
       <div className="app">
+        <GlobalStyle />
         <Header />
         <Switch>
           <Route exact path="/" component={HomePage}/>

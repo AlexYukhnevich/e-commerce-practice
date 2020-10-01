@@ -7,9 +7,6 @@ import { fetchCollectionsStart } from '../../redux/shop/shop.actions';
 import CollectionOverviewContainer from '../../components/collections-overview';
 import CollectionPageContainer from '../collection';
 
-  // unsubscribeFromSnapshot = null;
-
-
 const ShopPage = ({ match, fetchCollectionsStart }) => {
 
   useEffect(() => {
